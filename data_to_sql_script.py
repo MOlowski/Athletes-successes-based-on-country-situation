@@ -40,9 +40,12 @@ for t_n, df in dataframes.items():
         
 success = False
 #creating database
+
+pgconn = False
+
 try:
     pgconn = psycopg2.connect(
-        host = 'localhost',
+        host = 'postgres',
         user = 'postgres',
         port = '5432',
         password = 'pass')
@@ -55,7 +58,7 @@ try:
 
 #creating tables 
     pgconn = psycopg2.connect(
-        host = 'localhost',
+        host = 'postgres',
         user = 'postgres',
         port = '5432',
         password = 'pass',
