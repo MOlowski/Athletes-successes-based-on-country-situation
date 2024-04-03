@@ -3,6 +3,8 @@ version: 3:lastest
 services:
   web-scrap-script:
     build: .
+    ports:
+      - "8888:8888"
     volumes:
       - .:/athletes_successes
     depends_on:
