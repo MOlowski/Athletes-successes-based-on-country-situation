@@ -41,3 +41,5 @@ if os.path.exists(filename):
     os.remove(filename)
 
 population_per_country.to_csv("datasets/population_per_country.csv", index=False)
+
+print("web scrap script worked properly")

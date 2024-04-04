@@ -2,7 +2,9 @@ import psycopg2
 import pandas as pd
 from psycopg2 import Error
 import os
-
+print('check')
+import time
+print('check1')
 #reading csv files
 folder_path ='datasets/'
 csv_files = [
@@ -15,7 +17,7 @@ csv_files = [
     'poverty.csv',
     'healthcare_expenditure_gdp.csv',
     'obesity_adults.csv',
-    'population_per_country.csv']
+    'population.csv']
 
 dataframes = {}
 
@@ -43,6 +45,26 @@ success = False
 
 pgconn = False
 
+def is_postgres_available():
+    try:
+        # Try connecting to PostgreSQL
+        conn = psycopg2.connect(
+            host='postgres',
+            user='postgres',
+            port='5432',
+            password='pass'
+        )
+        print('connected')
+        conn.close()
+        return True
+    except psycopg2.OperationalError:
+        return False
+
+# Wait for PostgreSQL to be available
+while not is_postgres_available():
+    print("PostgreSQL is not available yet. Waiting...")
+    time.sleep(1)
+
 try:
     pgconn = psycopg2.connect(
         host = 'postgres',
@@ -54,6 +76,7 @@ try:
         pgconn.autocommit = True
         pgcursor.execute('DROP DATABASE IF EXISTS athletes_successes')
         pgcursor.execute('CREATE DATABASE athletes_successes')
+        print("created athletes_successes db")
     pgconn.close()
 
 #creating tables 
@@ -68,7 +91,7 @@ try:
     
     for table_name, df in dataframes.items():
         columns = []
-        if table_name =='poverty':
+        if (table_name =='poverty') or (table_name =='population'):
             for column, dtype in df.dtypes.items():
                 sql_type = ''
                 if dtype == 'int64':
